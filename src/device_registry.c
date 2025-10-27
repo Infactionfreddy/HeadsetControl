@@ -2,6 +2,7 @@
 
 #include "devices/audeze_maxwell.h"
 #include "devices/corsair_void.h"
+#include "devices/corsair_hs80.h"
 #include "devices/headsetcontrol_test.h"
 #include "devices/hyperx_calphaw.h"
 #include "devices/hyperx_cflight.h"
@@ -44,6 +45,7 @@ void init_devices()
     add_device(audeze_maxwell_init);
     // Corsair
     add_device(void_init);
+    add_device(hs80_init);
     // HyperX
     add_device(calphaw_init);
     add_device(cflight_init);
