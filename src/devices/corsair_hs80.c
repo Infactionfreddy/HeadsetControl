@@ -430,6 +430,6 @@ void hs80_init(struct device** device)
 
     *device = &device_hs80;
     
-    printf("[HS80] Corsair HS80 RGB Treiber initialisiert\n");
-    printf("[HS80] Hinweis: Mikrofon-Mute-Status verfügbar (hs80_request_mic_status)\n");
+    //printf("[HS80] Corsair HS80 RGB Treiber initialisiert\n");
+    //printf("[HS80] Hinweis: Mikrofon-Mute-Status verfügbar (hs80_request_mic_status)\n");
 }
