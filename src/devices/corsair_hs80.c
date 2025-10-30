@@ -89,6 +89,9 @@ static int hs80_init_software_mode(hid_device* device_handle, bool is_wireless)
     
     printf("[HS80] Initialisiere Software-Modus (Wireless: %s)\n", is_wireless ? "Ja" : "Nein");
     
+    // WICHTIG: HS80 verwendet hid_write() statt hid_send_feature_report()
+    // Die Pakete sind direkt 64 Bytes, ohne Report-ID-Prefix
+    
     // Step 1: Enable Software Mode
     packet[0] = HS80_CMD_PREFIX;
     packet[1] = headset_mode;
@@ -97,7 +100,7 @@ static int hs80_init_software_mode(hid_device* device_handle, bool is_wireless)
     packet[4] = 0x00;
     packet[5] = 0x02; // Software mode
     
-    int result = hid_send_feature_report(device_handle, packet, 64);
+    int result = hid_write(device_handle, packet, 64);
     if (result < 0) {
         printf("[HS80] Fehler beim Aktivieren des Software-Modus\n");
         return result;
@@ -113,7 +116,7 @@ static int hs80_init_software_mode(hid_device* device_handle, bool is_wireless)
     packet[3] = 0x00;
     packet[4] = 0x01;
     
-    result = hid_send_feature_report(device_handle, packet, 64);
+    result = hid_write(device_handle, packet, 64);
     if (result < 0) {
         printf("[HS80] Fehler beim Öffnen des Lighting-Endpoints\n");
         return result;
@@ -130,7 +133,7 @@ static int hs80_init_software_mode(hid_device* device_handle, bool is_wireless)
     packet[4] = 0x00;
     hs80_write_le16(&packet[5], 1000); // 1000 = 100%
     
-    result = hid_send_feature_report(device_handle, packet, 64);
+    result = hid_write(device_handle, packet, 64);
     if (result < 0) {
         printf("[HS80] Fehler beim Setzen der Helligkeit\n");
         return result;
@@ -159,7 +162,7 @@ static int hs80_restore_hardware_mode(hid_device* device_handle, bool is_wireles
     packet[4] = 0x00;
     packet[5] = 0x01; // Hardware mode
     
-    int result = hid_send_feature_report(device_handle, packet, 64);
+    int result = hid_write(device_handle, packet, 64);
     
     hs80_software_mode_active = false;
     
@@ -212,7 +215,7 @@ static int hs80_set_led_colors(hid_device* device_handle, const uint8_t* rgb_col
     packet[15] = rgb_colors[5]; // Power B
     packet[16] = rgb_colors[8]; // Mic B
     
-    return hid_send_feature_report(device_handle, packet, 64);
+    return hid_write(device_handle, packet, 64);
 }
 
 // Switch lights on/off
@@ -261,7 +264,7 @@ static int hs80_set_brightness(hid_device* device_handle, uint8_t brightness)
     packet[4] = 0x00;
     hs80_write_le16(&packet[5], brightness_raw);
     
-    int result = hid_send_feature_report(device_handle, packet, 64);
+    int result = hid_write(device_handle, packet, 64);
     
     if (result >= 0) {
         hs80_current_brightness = brightness;
