@@ -39,6 +39,11 @@ ENDIF()
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Option to enable HS80 keepalive debug prints. When ON, the code defines
+# ENABLE_HS80_KEEPALIVE_DEBUG for the compiler which enables verbose
+# keepalive packet prints in the HS80 driver.
+option(ENABLE_HS80_KEEPALIVE_DEBUG "Enable HS80 keepalive debug prints" OFF)
+
 # ------------------------------------------------------------------------------
 # Git version
 # ------------------------------------------------------------------------------
@@ -166,6 +171,11 @@ endif()
 
 add_executable(headsetcontrol ${SOURCE_FILES})
 target_link_libraries(headsetcontrol m ${HIDAPI_LIBRARIES})
+
+if(ENABLE_HS80_KEEPALIVE_DEBUG)
+    message(STATUS "HS80 keepalive debug enabled: defining ENABLE_HS80_KEEPALIVE_DEBUG")
+    target_compile_definitions(headsetcontrol PRIVATE ENABLE_HS80_KEEPALIVE_DEBUG)
+endif()
 
 install(TARGETS headsetcontrol DESTINATION bin)
 

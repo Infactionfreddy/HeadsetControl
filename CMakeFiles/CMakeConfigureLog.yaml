@@ -1,0 +1,1089 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineSystem.cmake:212 (message)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      The system is: Windows - 10.0.26200 - ARM64
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:462 (find_file)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:500 (CMAKE_DETERMINE_COMPILER_ID_WRITE)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:8 (CMAKE_DETERMINE_COMPILER_ID_BUILD)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCCompiler.cmake:122 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "file"
+    variable: "src_in"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "CMakeCCompilerId.c.in"
+    candidate_directories:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/"
+    found: "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeCCompilerId.c.in"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Program Files\\Parallels\\Parallels Tools\\Applications"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\CMake\\bin"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Python312-arm64\\Scripts\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Python312-arm64\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "c:\\Users\\frede\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCCompiler.cmake:122 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler:  
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      MSBuild-Version 17.14.23+b0019275e f├╝r .NET Framework
+      Der Buildvorgang wurde am 01.11.2025 13:07:34 gestartet.
+      
+      Projekt "C:\\Users\\frede\\Documents\\Programming\\BACKUP\\HeadsetControl\\CMakeFiles\\4.1.2\\CompilerIdC\\CompilerIdC.vcxproj" auf Knoten "1" (Standardziele).
+      PrepareForBuild:
+        Das Verzeichnis "Debug\\" wird erstellt.
+        Die strukturierte Ausgabe ist aktiviert. Die Formatierung der Compilerdiagnose spiegelt die Fehlerhierarchie wider. Weitere Informationen finden Sie unter https://aka.ms/cpp/structured-output.
+        Das Verzeichnis "Debug\\CompilerIdC.tlog\\" wird erstellt.
+      InitializeBuildStatus:
+        "Debug\\CompilerIdC.tlog\\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+        Aktualisieren des Timestamps von "Debug\\CompilerIdC.tlog\\unsuccessfulbuild".
+      ClCompile:
+        C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostArm64\\arm64\\CL.exe /c /nologo /W0 /WX- /diagnostics:column /Od /Oy- /D _ARM64_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1 /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\\\" /Fd"Debug\\vc143.pdb" /external:W0 /Gd /TC /analyze- /FC /errorReport:queue CMakeCCompilerId.c
+        CMakeCCompilerId.c
+      Link:
+        C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostArm64\\arm64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdC.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdC.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdC.lib" /MACHINE:ARM64 Debug\\CMakeCCompilerId.obj
+        CompilerIdC.vcxproj -> C:\\Users\\frede\\Documents\\Programming\\BACKUP\\HeadsetControl\\CMakeFiles\\4.1.2\\CompilerIdC\\CompilerIdC.exe
+      PostBuildEvent:
+        for %%i in (cl.exe) do @echo CMAKE_C_COMPILER=%%~$PATH:i
+        :VCEnd
+        CMAKE_C_COMPILER=C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostarm64\\arm64\\cl.exe
+      FinalizeBuildStatus:
+        Die Datei "Debug\\CompilerIdC.tlog\\unsuccessfulbuild" wird gel├Âscht.
+        Aktualisieren des Timestamps von "Debug\\CompilerIdC.tlog\\CompilerIdC.lastbuildstate".
+      Die Erstellung von Projekt "C:\\Users\\frede\\Documents\\Programming\\BACKUP\\HeadsetControl\\CMakeFiles\\4.1.2\\CompilerIdC\\CompilerIdC.vcxproj" ist abgeschlossen (Standardziele).
+      
+      Der Buildvorgang wurde erfolgreich ausgef├╝hrt.
+          0 Warnung(en)
+          0 Fehler
+      
+      Verstrichene Zeit 00:00:01.63
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.vcxproj"
+      
+      The C compiler identification is MSVC, found in:
+        C:/Users/frede/Documents/Programming/BACKUP/HeadsetControl/CMakeFiles/4.1.2/CompilerIdC/CompilerIdC.exe
+      
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:37 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:65 (__resolve_tool_path)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:103 (__resolve_linker_path)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "_CMAKE_TOOL_WITH_PATH"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "link"
+    candidate_directories:
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostarm64/arm64/"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/"
+    searched_directories:
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostarm64/arm64/link.com"
+    found: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostarm64/arm64/link.exe"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Program Files\\Parallels\\Parallels Tools\\Applications"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\CMake\\bin"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Python312-arm64\\Scripts\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Python312-arm64\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "c:\\Users\\frede\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:37 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:65 (__resolve_tool_path)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:104 (__resolve_linker_path)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "_CMAKE_TOOL_WITH_PATH"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "lld-link"
+    candidate_directories:
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostarm64/arm64/"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/"
+    searched_directories:
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostarm64/arm64/lld-link.com"
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostarm64/arm64/lld-link.exe"
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostarm64/arm64/lld-link"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/lld-link.com"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/lld-link.exe"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/lld-link"
+      - "C:/Windows/System32/lld-link.com"
+      - "C:/Windows/System32/lld-link.exe"
+      - "C:/Windows/System32/lld-link"
+      - "C:/Windows/lld-link.com"
+      - "C:/Windows/lld-link.exe"
+      - "C:/Windows/lld-link"
+      - "C:/Windows/System32/wbem/lld-link.com"
+      - "C:/Windows/System32/wbem/lld-link.exe"
+      - "C:/Windows/System32/wbem/lld-link"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/lld-link.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/lld-link.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/lld-link"
+      - "C:/Windows/System32/OpenSSH/lld-link.com"
+      - "C:/Windows/System32/OpenSSH/lld-link.exe"
+      - "C:/Windows/System32/OpenSSH/lld-link"
+      - "C:/Program Files/Git/cmd/lld-link.com"
+      - "C:/Program Files/Git/cmd/lld-link.exe"
+      - "C:/Program Files/Git/cmd/lld-link"
+      - "C:/Program Files/CMake/bin/lld-link.com"
+      - "C:/Program Files/CMake/bin/lld-link.exe"
+      - "C:/Program Files/CMake/bin/lld-link"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link.com"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link.exe"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/lld-link.com"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/lld-link.exe"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/lld-link"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/lld-link.com"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/lld-link.exe"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/lld-link"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/lld-link.com"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/lld-link.exe"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/lld-link"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/lld-link.com"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/lld-link.exe"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/lld-link"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/lld-link.com"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/lld-link.exe"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/lld-link"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/lld-link.com"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/lld-link.exe"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/lld-link"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "C:\\Program Files\\Parallels\\Parallels Tools\\Applications"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\CMake\\bin"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Python312-arm64\\Scripts\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Python312-arm64\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "c:\\Users\\frede\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_LINKER"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "link"
+    candidate_directories:
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostarm64/arm64/"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/"
+    searched_directories:
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostarm64/arm64/link.com"
+    found: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostarm64/arm64/link.exe"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Program Files\\Parallels\\Parallels Tools\\Applications"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\CMake\\bin"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Python312-arm64\\Scripts\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Python312-arm64\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "c:\\Users\\frede\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_MT"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "mt"
+    candidate_directories:
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostarm64/arm64/"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/"
+    searched_directories:
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostarm64/arm64/mt.com"
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostarm64/arm64/mt.exe"
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostarm64/arm64/mt"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/mt.com"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/mt.exe"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/mt"
+      - "C:/Windows/System32/mt.com"
+      - "C:/Windows/System32/mt.exe"
+      - "C:/Windows/System32/mt"
+      - "C:/Windows/mt.com"
+      - "C:/Windows/mt.exe"
+      - "C:/Windows/mt"
+      - "C:/Windows/System32/wbem/mt.com"
+      - "C:/Windows/System32/wbem/mt.exe"
+      - "C:/Windows/System32/wbem/mt"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/mt.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/mt.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/mt"
+      - "C:/Windows/System32/OpenSSH/mt.com"
+      - "C:/Windows/System32/OpenSSH/mt.exe"
+      - "C:/Windows/System32/OpenSSH/mt"
+      - "C:/Program Files/Git/cmd/mt.com"
+      - "C:/Program Files/Git/cmd/mt.exe"
+      - "C:/Program Files/Git/cmd/mt"
+      - "C:/Program Files/CMake/bin/mt.com"
+      - "C:/Program Files/CMake/bin/mt.exe"
+      - "C:/Program Files/CMake/bin/mt"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/mt.com"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/mt.exe"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/mt"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/mt.com"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/mt.exe"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/mt"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/mt.com"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/mt.exe"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/mt"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/mt.com"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/mt.exe"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/mt"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/mt.com"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/mt.exe"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/mt"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/mt.com"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/mt.exe"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/mt"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/mt.com"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/mt.exe"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/mt"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "C:\\Program Files\\Parallels\\Parallels Tools\\Applications"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\CMake\\bin"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Python312-arm64\\Scripts\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Python312-arm64\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "c:\\Users\\frede\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_AR"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "lib"
+    candidate_directories:
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostarm64/arm64/"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/"
+    searched_directories:
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostarm64/arm64/lib.com"
+    found: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostarm64/arm64/lib.exe"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Program Files\\Parallels\\Parallels Tools\\Applications"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\CMake\\bin"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Python312-arm64\\Scripts\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Python312-arm64\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "c:\\Users\\frede\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineRCCompiler.cmake:40 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/Platform/Windows-MSVC.cmake:574 (enable_language)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/Platform/Windows-MSVC.cmake:547 (__windows_compiler_msvc_enable_rc)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/Platform/Windows-MSVC-C.cmake:5 (__windows_compiler_msvc)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeCInformation.cmake:48 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_RC_COMPILER"
+    description: "RC compiler"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "rc"
+    candidate_directories:
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/"
+      - "C:/Program Files/bin/"
+      - "C:/Program Files/sbin/"
+      - "C:/Program Files/"
+      - "C:/Program Files (x86)/bin/"
+      - "C:/Program Files (x86)/sbin/"
+      - "C:/Program Files (x86)/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files/CMake/sbin/"
+      - "C:/Program Files/CMake/"
+      - "C:/Program Files (x86)/headsetcontrol/bin/"
+      - "C:/Program Files (x86)/headsetcontrol/sbin/"
+      - "C:/Program Files (x86)/headsetcontrol/"
+    searched_directories:
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/rc.com"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/rc.exe"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/rc"
+      - "C:/Windows/System32/rc.com"
+      - "C:/Windows/System32/rc.exe"
+      - "C:/Windows/System32/rc"
+      - "C:/Windows/rc.com"
+      - "C:/Windows/rc.exe"
+      - "C:/Windows/rc"
+      - "C:/Windows/System32/wbem/rc.com"
+      - "C:/Windows/System32/wbem/rc.exe"
+      - "C:/Windows/System32/wbem/rc"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/rc.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/rc.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/rc"
+      - "C:/Windows/System32/OpenSSH/rc.com"
+      - "C:/Windows/System32/OpenSSH/rc.exe"
+      - "C:/Windows/System32/OpenSSH/rc"
+      - "C:/Program Files/Git/cmd/rc.com"
+      - "C:/Program Files/Git/cmd/rc.exe"
+      - "C:/Program Files/Git/cmd/rc"
+      - "C:/Program Files/CMake/bin/rc.com"
+      - "C:/Program Files/CMake/bin/rc.exe"
+      - "C:/Program Files/CMake/bin/rc"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/rc.com"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/rc.exe"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/rc"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/rc.com"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/rc.exe"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/rc"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/rc.com"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/rc.exe"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/rc"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/rc.com"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/rc.exe"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/rc"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/rc.com"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/rc.exe"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/rc"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/rc.com"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/rc.exe"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/rc"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/rc.com"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/rc.exe"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/rc"
+      - "C:/Program Files/bin/rc.com"
+      - "C:/Program Files/bin/rc.exe"
+      - "C:/Program Files/bin/rc"
+      - "C:/Program Files/sbin/rc.com"
+      - "C:/Program Files/sbin/rc.exe"
+      - "C:/Program Files/sbin/rc"
+      - "C:/Program Files/rc.com"
+      - "C:/Program Files/rc.exe"
+      - "C:/Program Files/rc"
+      - "C:/Program Files (x86)/bin/rc.com"
+      - "C:/Program Files (x86)/bin/rc.exe"
+      - "C:/Program Files (x86)/bin/rc"
+      - "C:/Program Files (x86)/sbin/rc.com"
+      - "C:/Program Files (x86)/sbin/rc.exe"
+      - "C:/Program Files (x86)/sbin/rc"
+      - "C:/Program Files (x86)/rc.com"
+      - "C:/Program Files (x86)/rc.exe"
+      - "C:/Program Files (x86)/rc"
+      - "C:/Program Files/CMake/bin/rc.com"
+      - "C:/Program Files/CMake/bin/rc.exe"
+      - "C:/Program Files/CMake/bin/rc"
+      - "C:/Program Files/CMake/sbin/rc.com"
+      - "C:/Program Files/CMake/sbin/rc.exe"
+      - "C:/Program Files/CMake/sbin/rc"
+      - "C:/Program Files/CMake/rc.com"
+      - "C:/Program Files/CMake/rc.exe"
+      - "C:/Program Files/CMake/rc"
+      - "C:/Program Files (x86)/headsetcontrol/bin/rc.com"
+      - "C:/Program Files (x86)/headsetcontrol/bin/rc.exe"
+      - "C:/Program Files (x86)/headsetcontrol/bin/rc"
+      - "C:/Program Files (x86)/headsetcontrol/sbin/rc.com"
+      - "C:/Program Files (x86)/headsetcontrol/sbin/rc.exe"
+      - "C:/Program Files (x86)/headsetcontrol/sbin/rc"
+      - "C:/Program Files (x86)/headsetcontrol/rc.com"
+      - "C:/Program Files (x86)/headsetcontrol/rc.exe"
+      - "C:/Program Files (x86)/headsetcontrol/rc"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "C:\\Program Files\\Parallels\\Parallels Tools\\Applications"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\CMake\\bin"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Python312-arm64\\Scripts\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Python312-arm64\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "c:\\Users\\frede\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
+      CMAKE_INSTALL_PREFIX: "C:/Program Files (x86)/headsetcontrol"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "C:/Program Files"
+        - "C:/Program Files (x86)"
+        - "C:/Program Files/CMake"
+        - "C:/Program Files (x86)/headsetcontrol"
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerABI.cmake:83 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "C:/Users/frede/Documents/Programming/BACKUP/HeadsetControl/CMakeFiles/CMakeScratch/TryCompile-6buqvd"
+      binary: "C:/Users/frede/Documents/Programming/BACKUP/HeadsetControl/CMakeFiles/CMakeScratch/TryCompile-6buqvd"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
+      CMAKE_C_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:ARM64"
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/frede/Documents/Programming/BACKUP/HeadsetControl/CMakeFiles/CMakeScratch/TryCompile-6buqvd'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/arm64/MSBuild.exe" cmTC_22d71.vcxproj /p:Configuration=Debug /p:Platform=ARM64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild-Version 17.14.23+b0019275e f├╝r .NET Framework
+        Der Buildvorgang wurde am 01.11.2025 13:07:36 gestartet.
+        
+        Projekt "C:\\Users\\frede\\Documents\\Programming\\BACKUP\\HeadsetControl\\CMakeFiles\\CMakeScratch\\TryCompile-6buqvd\\cmTC_22d71.vcxproj" auf Knoten "1" (Standardziele).
+        PrepareForBuild:
+          Das Verzeichnis "cmTC_22d71.dir\\Debug\\" wird erstellt.
+          Die strukturierte Ausgabe ist aktiviert. Die Formatierung der Compilerdiagnose spiegelt die Fehlerhierarchie wider. Weitere Informationen finden Sie unter https://aka.ms/cpp/structured-output.
+          Das Verzeichnis "C:\\Users\\frede\\Documents\\Programming\\BACKUP\\HeadsetControl\\CMakeFiles\\CMakeScratch\\TryCompile-6buqvd\\Debug\\" wird erstellt.
+          Das Verzeichnis "cmTC_22d71.dir\\Debug\\cmTC_22d71.tlog\\" wird erstellt.
+        InitializeBuildStatus:
+          "cmTC_22d71.dir\\Debug\\cmTC_22d71.tlog\\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+          Aktualisieren des Timestamps von "cmTC_22d71.dir\\Debug\\cmTC_22d71.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostArm64\\arm64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /Oy- /D _ARM64_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_22d71.dir\\Debug\\\\" /Fd"cmTC_22d71.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /analyze- /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.1\\Modules\\CMakeCCompilerABI.c"
+          Microsoft (R) C/C++ Optimierungscompiler Version 19.44.35219 f├╝r ARM64
+          Copyright (C) Microsoft Corporation. Alle Rechte vorbehalten.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /Oy- /D _ARM64_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_22d71.dir\\Debug\\\\" /Fd"cmTC_22d71.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /analyze- /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.1\\Modules\\CMakeCCompilerABI.c"
+          CMakeCCompilerABI.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostArm64\\arm64\\link.exe /OUT:"C:\\Users\\frede\\Documents\\Programming\\BACKUP\\HeadsetControl\\CMakeFiles\\CMakeScratch\\TryCompile-6buqvd\\Debug\\cmTC_22d71.exe" /INCREMENTAL /ILK:"cmTC_22d71.dir\\Debug\\cmTC_22d71.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/frede/Documents/Programming/BACKUP/HeadsetControl/CMakeFiles/CMakeScratch/TryCompile-6buqvd/Debug/cmTC_22d71.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/frede/Documents/Programming/BACKUP/HeadsetControl/CMakeFiles/CMakeScratch/TryCompile-6buqvd/Debug/cmTC_22d71.lib" /MACHINE:ARM64  /machine:ARM64 cmTC_22d71.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_22d71.vcxproj -> C:\\Users\\frede\\Documents\\Programming\\BACKUP\\HeadsetControl\\CMakeFiles\\CMakeScratch\\TryCompile-6buqvd\\Debug\\cmTC_22d71.exe
+        FinalizeBuildStatus:
+          Die Datei "cmTC_22d71.dir\\Debug\\cmTC_22d71.tlog\\unsuccessfulbuild" wird gel├Âscht.
+          Aktualisieren des Timestamps von "cmTC_22d71.dir\\Debug\\cmTC_22d71.tlog\\cmTC_22d71.lastbuildstate".
+        Die Erstellung von Projekt "C:\\Users\\frede\\Documents\\Programming\\BACKUP\\HeadsetControl\\CMakeFiles\\CMakeScratch\\TryCompile-6buqvd\\cmTC_22d71.vcxproj" ist abgeschlossen (Standardziele).
+        
+        Der Buildvorgang wurde erfolgreich ausgef├╝hrt.
+            0 Warnung(en)
+            0 Fehler
+        
+        Verstrichene Zeit 00:00:01.26
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerABI.cmake:253 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed C implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?))("|,| |$)]
+        linker tool for 'C': C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/HostArm64/arm64/link.exe
+        implicit libs: []
+        implicit objs: []
+        implicit dirs: []
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/Internal/CMakeDetermineLinkerId.cmake:36 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerABI.cmake:299 (cmake_determine_linker_id)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Running the C compiler's linker: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/HostArm64/arm64/link.exe" "-v"
+      Microsoft (R) Incremental Linker Version 14.44.35219.0
+      Copyright (C) Microsoft Corporation.  All rights reserved.
+  -
+    kind: "find-v1"
+    backtrace:
+      - "cmake_modules/Findhidapi.cmake:55 (find_library)"
+      - "CMakeLists.txt:7 (find_package)"
+    mode: "library"
+    variable: "HIDAPI_LIBRARY"
+    description: "Path to a library."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "hidapi.a"
+      - "libhidapi.a"
+      - "hidapi"
+    candidate_directories:
+      - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi/lib/"
+      - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi/"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/"
+      - "C:/Program Files/lib/"
+      - "C:/Program Files/"
+      - "C:/Program Files (x86)/lib/"
+      - "C:/Program Files (x86)/"
+      - "C:/Program Files/CMake/lib/"
+      - "C:/Program Files/CMake/"
+      - "C:/Program Files (x86)/headsetcontrol/lib/"
+      - "C:/Program Files (x86)/headsetcontrol/"
+      - "C:/Program Files (x86)/headsetcontrol/bin/"
+      - "/bin/"
+    searched_directories:
+      - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi/lib/"
+      - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi/lib/"
+      - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi/"
+      - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi/"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/"
+      - "C:/Program Files/lib/"
+      - "C:/Program Files/lib/"
+      - "C:/Program Files/"
+      - "C:/Program Files/"
+      - "C:/Program Files (x86)/lib/"
+      - "C:/Program Files (x86)/lib/"
+      - "C:/Program Files (x86)/"
+      - "C:/Program Files (x86)/"
+      - "C:/Program Files/CMake/lib/"
+      - "C:/Program Files/CMake/lib/"
+      - "C:/Program Files/CMake/"
+      - "C:/Program Files/CMake/"
+      - "C:/Program Files (x86)/headsetcontrol/lib/"
+      - "C:/Program Files (x86)/headsetcontrol/lib/"
+      - "C:/Program Files (x86)/headsetcontrol/"
+      - "C:/Program Files (x86)/headsetcontrol/"
+      - "C:/Program Files (x86)/headsetcontrol/bin/"
+      - "C:/Program Files (x86)/headsetcontrol/bin/"
+      - "/bin/"
+      - "/bin/"
+      - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi/lib/"
+      - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi/lib/"
+      - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi/"
+      - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi/"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/"
+      - "C:/Program Files/lib/"
+      - "C:/Program Files/lib/"
+      - "C:/Program Files/"
+      - "C:/Program Files/"
+      - "C:/Program Files (x86)/lib/"
+      - "C:/Program Files (x86)/lib/"
+      - "C:/Program Files (x86)/"
+      - "C:/Program Files (x86)/"
+      - "C:/Program Files/CMake/lib/"
+      - "C:/Program Files/CMake/lib/"
+      - "C:/Program Files/CMake/"
+      - "C:/Program Files/CMake/"
+      - "C:/Program Files (x86)/headsetcontrol/lib/"
+      - "C:/Program Files (x86)/headsetcontrol/lib/"
+      - "C:/Program Files (x86)/headsetcontrol/"
+      - "C:/Program Files (x86)/headsetcontrol/"
+      - "C:/Program Files (x86)/headsetcontrol/bin/"
+      - "C:/Program Files (x86)/headsetcontrol/bin/"
+      - "/bin/"
+      - "/bin/"
+      - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi/lib/"
+      - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi/"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/"
+      - "C:/Program Files/lib/"
+      - "C:/Program Files/"
+      - "C:/Program Files (x86)/lib/"
+      - "C:/Program Files (x86)/"
+      - "C:/Program Files/CMake/lib/"
+      - "C:/Program Files/CMake/"
+      - "C:/Program Files (x86)/headsetcontrol/lib/"
+      - "C:/Program Files (x86)/headsetcontrol/"
+      - "C:/Program Files (x86)/headsetcontrol/bin/"
+      - "/bin/"
+    found: false
+    search_context:
+      package_stack:
+        -
+          package_paths:
+            - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi"
+      ENV{PATH}:
+        - "C:\\Program Files\\Parallels\\Parallels Tools\\Applications"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\CMake\\bin"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Python312-arm64\\Scripts\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Python312-arm64\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "c:\\Users\\frede\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
+      CMAKE_INSTALL_PREFIX: "C:/Program Files (x86)/headsetcontrol"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "C:/Program Files"
+        - "C:/Program Files (x86)"
+        - "C:/Program Files/CMake"
+        - "C:/Program Files (x86)/headsetcontrol"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "C:/Program Files (x86)/headsetcontrol/bin"
+        - "C:/Program Files/CMake/bin"
+        - "/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "cmake_modules/Findhidapi.cmake:62 (find_path)"
+      - "CMakeLists.txt:7 (find_package)"
+    mode: "path"
+    variable: "HIDAPI_INCLUDE_DIR"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "hidapi.h"
+    candidate_directories:
+      - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi/include/hidapi/"
+      - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi/include/"
+      - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi/hidapi/"
+      - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi/"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/hidapi/"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/"
+      - "C:/Windows/System32/hidapi/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/hidapi/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/hidapi/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/hidapi/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/hidapi/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/Git/cmd/hidapi/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/CMake/bin/hidapi/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/hidapi/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/hidapi/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/hidapi/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/hidapi/"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/hidapi/"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/hidapi/"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/hidapi/"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/"
+      - "C:/Program Files/include/hidapi/"
+      - "C:/Program Files/include/"
+      - "C:/Program Files/hidapi/"
+      - "C:/Program Files/"
+      - "C:/Program Files (x86)/include/hidapi/"
+      - "C:/Program Files (x86)/include/"
+      - "C:/Program Files (x86)/hidapi/"
+      - "C:/Program Files (x86)/"
+      - "C:/Program Files/CMake/include/hidapi/"
+      - "C:/Program Files/CMake/include/"
+      - "C:/Program Files/CMake/hidapi/"
+      - "C:/Program Files/CMake/"
+      - "C:/Program Files (x86)/headsetcontrol/include/hidapi/"
+      - "C:/Program Files (x86)/headsetcontrol/include/"
+      - "C:/Program Files (x86)/headsetcontrol/hidapi/"
+      - "C:/Program Files (x86)/headsetcontrol/"
+    searched_directories:
+      - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi/include/hidapi/hidapi.h"
+      - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi/include/hidapi.h"
+      - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi/hidapi/hidapi.h"
+      - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi/hidapi.h"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/hidapi/hidapi.h"
+      - "C:/Program Files/Parallels/Parallels Tools/Applications/hidapi.h"
+      - "C:/Windows/System32/hidapi/hidapi.h"
+      - "C:/Windows/System32/hidapi.h"
+      - "C:/Windows/hidapi/hidapi.h"
+      - "C:/Windows/hidapi.h"
+      - "C:/Windows/System32/wbem/hidapi/hidapi.h"
+      - "C:/Windows/System32/wbem/hidapi.h"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/hidapi/hidapi.h"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/hidapi.h"
+      - "C:/Windows/System32/OpenSSH/hidapi/hidapi.h"
+      - "C:/Windows/System32/OpenSSH/hidapi.h"
+      - "C:/Program Files/Git/cmd/hidapi/hidapi.h"
+      - "C:/Program Files/Git/cmd/hidapi.h"
+      - "C:/Program Files/CMake/bin/hidapi/hidapi.h"
+      - "C:/Program Files/CMake/bin/hidapi.h"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/hidapi/hidapi.h"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/hidapi.h"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/hidapi/hidapi.h"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/Scripts/hidapi.h"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/hidapi/hidapi.h"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Python312-arm64/hidapi.h"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/hidapi/hidapi.h"
+      - "C:/Users/frede/AppData/Local/Programs/Python/Launcher/hidapi.h"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/hidapi/hidapi.h"
+      - "C:/Users/frede/AppData/Local/Microsoft/WindowsApps/hidapi.h"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/hidapi/hidapi.h"
+      - "C:/Users/frede/AppData/Local/Programs/Microsoft VS Code/bin/hidapi.h"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/hidapi/hidapi.h"
+      - "C:/Users/frede/AppData/Roaming/Code/User/globalStorage/github.copilot-chat/debugCommand/hidapi.h"
+      - "C:/Program Files/include/hidapi/hidapi.h"
+      - "C:/Program Files/include/hidapi.h"
+      - "C:/Program Files/hidapi/hidapi.h"
+      - "C:/Program Files/hidapi.h"
+      - "C:/Program Files (x86)/include/hidapi/hidapi.h"
+      - "C:/Program Files (x86)/include/hidapi.h"
+      - "C:/Program Files (x86)/hidapi/hidapi.h"
+      - "C:/Program Files (x86)/hidapi.h"
+      - "C:/Program Files/CMake/include/hidapi/hidapi.h"
+      - "C:/Program Files/CMake/include/hidapi.h"
+      - "C:/Program Files/CMake/hidapi/hidapi.h"
+      - "C:/Program Files/CMake/hidapi.h"
+      - "C:/Program Files (x86)/headsetcontrol/include/hidapi/hidapi.h"
+      - "C:/Program Files (x86)/headsetcontrol/include/hidapi.h"
+      - "C:/Program Files (x86)/headsetcontrol/hidapi/hidapi.h"
+      - "C:/Program Files (x86)/headsetcontrol/hidapi.h"
+    found: false
+    search_context:
+      package_stack:
+        -
+          package_paths:
+            - "C:/Users/frede/Documents/Programming/HeadsetControl/hidapi"
+      ENV{PATH}:
+        - "C:\\Program Files\\Parallels\\Parallels Tools\\Applications"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\CMake\\bin"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Python312-arm64\\Scripts\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Python312-arm64\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\frede\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\frede\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "c:\\Users\\frede\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
+      CMAKE_INSTALL_PREFIX: "C:/Program Files (x86)/headsetcontrol"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "C:/Program Files"
+        - "C:/Program Files (x86)"
+        - "C:/Program Files/CMake"
+        - "C:/Program Files (x86)/headsetcontrol"
+...

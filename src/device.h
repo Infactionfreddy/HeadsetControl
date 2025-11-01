@@ -29,10 +29,13 @@ enum capabilities {
     CAP_BATTERY_STATUS,
     CAP_NOTIFICATION_SOUND,
     CAP_LIGHTS,
+    CAP_RGB_ZONES,
     CAP_INACTIVE_TIME,
     CAP_CHATMIX_STATUS,
     CAP_VOICE_PROMPTS,
     CAP_ROTATE_TO_MUTE,
+    CAP_BUTTON_HOLD,
+    CAP_BUTTON_RELEASE,
     CAP_EQUALIZER_PRESET,
     CAP_EQUALIZER,
     CAP_PARAMETRIC_EQUALIZER,
@@ -273,6 +276,58 @@ struct device {
      */
     int (*switch_lights)(hid_device* hid_device, uint8_t on);
 
+    /** @brief Function pointer for setting RGB zone color (device-specific)
+    *
+    * @brief Set a single RGB zone to a color.
+    *
+    * Drivers that support per-zone RGB should set this function pointer
+    * to provide zone-level control. Zone numbering is device specific
+    * (e.g. 0=Logo,1=Power,2=Mic for HS80). The caller should check
+    * `device->capabilities & B(CAP_RGB_ZONES)` before calling.
+    *
+    * @param hid_device Pointer to an open HID handle for the device.
+    * @param zone Zone index (0.. N-1) as defined by the device.
+    * @param r Red channel 0-255.
+    * @param g Green channel 0-255.
+    * @param b Blue channel 0-255.
+    * @return >=0 on success, negative error code on failure.
+     */
+    int (*set_zone_rgb)(hid_device* hid_device, uint8_t zone, uint8_t r, uint8_t g, uint8_t b);
+
+    /**
+     * @brief Set all RGB zones to the same color.
+     *
+     * Convenience function for drivers that can efficiently set every
+     * zone to the same RGB value. If not implemented, callers can fall
+     * back to calling `set_zone_rgb` for each zone.
+     *
+     * @param hid_device Open HID handle.
+     * @param r Red 0-255.
+     * @param g Green 0-255.
+     * @param b Blue 0-255.
+     * @return >=0 on success, negative on error.
+     */
+    int (*set_all_rgb)(hid_device* hid_device, uint8_t r, uint8_t g, uint8_t b);
+
+    /**
+     * @brief Set per-zone brightness as percentage (0-100).
+     *
+     * Some devices expose native per-zone brightness. For devices that
+     * do not, drivers may implement software-emulation by scaling the
+     * currently cached RGB values for the zone and re-sending the RGB
+     * packet (HS80 driver currently does this).
+     *
+     * Note: For backward compatibility, callers that also support
+     * `CAP_MICROPHONE_MUTE_LED_BRIGHTNESS` may map percentage values to
+     * the 0..3 scale expected by `send_microphone_mute_led_brightness`.
+     *
+     * @param hid_device Open HID handle.
+     * @param zone Zone index.
+     * @param brightness_percent Brightness in percent (0-100).
+     * @return >=0 on success, negative on error.
+     */
+    int (*set_zone_brightness)(hid_device* hid_device, uint8_t zone, uint8_t brightness_percent);
+
     /** @brief Function pointer for setting headset inactive time
      *
      *  Forwards the request to the device specific implementation
@@ -328,6 +383,17 @@ struct device {
      *              -1          HIDAPI error
      */
     int (*switch_rotate_to_mute)(hid_device* hid_device, uint8_t on);
+
+    /** @brief Function pointer for requesting microphone (rotate-to-mute) status
+     *
+     * Some devices (e.g. HS80) provide an event/readable report that indicates
+     * whether the microphone is currently muted/unmuted. Drivers that support
+     * reporting the microphone status should implement this function pointer.
+     *
+     * @param hid_device Open HID handle
+     * @returns >=0 on success (e.g. 0 = unmuted, 1 = muted), negative on error
+     */
+    int (*request_mic_status)(hid_device* hid_device);
 
     /** @brief Function pointer for setting headset equalizer preset
      *

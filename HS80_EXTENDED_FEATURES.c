@@ -70,7 +70,7 @@ typedef struct {
 // Beispiel: RGB-Effekt - Rainbow
 /*
 static int hs80_effect_rainbow(hid_device* device_handle, int duration_ms, int step_ms) {
-    printf("[HS80] Starte Regenbogen-Effekt...\n");
+    fprintf(stderr, "[HS80] Starte Regenbogen-Effekt...\n");
     
     int steps = duration_ms / step_ms;
     for (int i = 0; i < steps; i++) {
@@ -98,7 +98,7 @@ static int hs80_effect_rainbow(hid_device* device_handle, int duration_ms, int s
 // Beispiel: RGB-Effekt - Pulse
 /*
 static int hs80_effect_pulse(hid_device* device_handle, rgb_color_t color, int cycles, int step_ms) {
-    printf("[HS80] Starte Puls-Effekt...\n");
+    fprintf(stderr, "[HS80] Starte Puls-Effekt...\n");
     
     for (int c = 0; c < cycles; c++) {
         // Fade in
@@ -181,7 +181,7 @@ static rgb_color_t hsv_to_rgb(float h, float s, float v) {
 /*
 static int hs80_set_zone_color(hid_device* device_handle, const char* zone, 
                                 uint8_t r, uint8_t g, uint8_t b) {
-    printf("[HS80] Setze %s LED auf RGB(%d, %d, %d)\n", zone, r, g, b);
+    fprintf(stderr, "[HS80] Setze %s LED auf RGB(%d, %d, %d)\n", zone, r, g, b);
     
     // Aktuelle Farben auslesen (würde eigene Tracking-Struktur benötigen)
     static led_zones_t current_zones = {
@@ -203,7 +203,7 @@ static int hs80_set_zone_color(hid_device* device_handle, const char* zone,
         current_zones.power = color;
         current_zones.mic = color;
     } else {
-        printf("[HS80] Unbekannte Zone: %s\n", zone);
+    fprintf(stderr, "[HS80] Unbekannte Zone: %s\n", zone);
         return -1;
     }
     

@@ -20,6 +20,7 @@
 #include "dev.h"
 #include "device.h"
 #include "device_registry.h"
+#include "devices/corsair_hs80.h"
 #include "hid_utility.h"
 #include "output.h"
 #include "utility.h"
@@ -35,6 +36,93 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
+#ifdef _WIN32
+#include <windows.h>
+#ifdef interface
+#undef interface
+#endif
+#else
+#include <pthread.h>
+#include <time.h>
+#endif
+
+/* Globals used by HS80 keep-alive thread helpers */
+static hid_device** g_device_handles = NULL;
+static char** g_hid_paths = NULL;
+static uint8_t* g_last_rgb = NULL; /* flattened [i*3 + 0..2] */
+static bool* g_keepalive_running = NULL;
+#ifdef _WIN32
+static HANDLE* g_keepalive_threads = NULL;
+#else
+static pthread_t* g_keepalive_threads = NULL;
+#endif
+static int g_headset_available = 0;
+
+#ifdef _WIN32
+static DWORD WINAPI hs80_keepalive_thread_win(LPVOID arg) {
+    int idx = *(int*)arg;
+    free(arg);
+    while (g_keepalive_running[idx]) {
+        Sleep(2000);
+        hid_device* h = g_device_handles[idx];
+        if (h) {
+            hs80_keep_alive(h);
+        }
+    }
+    return 0;
+}
+#else
+static void* hs80_keepalive_thread_posix(void* arg) {
+    int idx = *(int*)arg;
+    free(arg);
+    while (g_keepalive_running[idx]) {
+        struct timespec ts = {2, 0};
+        nanosleep(&ts, NULL);
+        hid_device* h = g_device_handles[idx];
+        if (h) {
+            hs80_keep_alive(h);
+        }
+    }
+    return NULL;
+}
+#endif
+
+/* Local keep-alive structure for server-mode instance */
+struct LocalKeepAlive {
+    hid_device* handle;
+    uint8_t last_rgb[3];
+    volatile int running;
+};
+
+#ifdef _WIN32
+static DWORD WINAPI local_keepalive_thread_win(LPVOID arg) {
+    struct LocalKeepAlive* ka = (struct LocalKeepAlive*)arg;
+    while (ka->running) {
+        Sleep(2000);
+        if (ka->handle) {
+            /* Use hs80_keep_alive to refresh software mode without changing colors */
+            hs80_keep_alive(ka->handle);
+        }
+    }
+    free(ka);
+    return 0;
+}
+#else
+static void* local_keepalive_thread_posix(void* arg) {
+    struct LocalKeepAlive* ka = (struct LocalKeepAlive*)arg;
+    while (ka->running) {
+        struct timespec ts = {2, 0};
+        nanosleep(&ts, NULL);
+        if (ka->handle) {
+            /* Use hs80_keep_alive to refresh software mode without changing colors */
+            hs80_keep_alive(ka->handle);
+        }
+    }
+    free(ka);
+    return NULL;
+}
+#endif
 
 int test_profile = 0;
 
@@ -271,6 +359,7 @@ static FeatureResult handle_feature(struct device* device_found, hid_device** de
 
     switch (cap) {
     case CAP_SIDETONE:
+        /* Forward sidetone request to device implementation */
         ret = device_found->send_sidetone(*device_handle, (uint8_t) * (int*)param);
         break;
 
@@ -450,6 +539,13 @@ void print_help(char* programname, struct device* device_found, bool show_all)
         printf("%s:\n", (show_lights && show_voice_prompts) ? "Lights and Voice Prompts" : (show_lights ? "Lights" : "Voice Prompts"));
         if (show_lights) {
             printf("  -l, --light [0|1]\t\tTurn lights off (0) or on (1)\n");
+            printf("  --rgb-logo R,G,B\t\tSet logo RGB color (0-255 each)\n");
+            printf("  --rgb-power R,G,B\t\tSet power RGB color (0-255 each)\n");
+            printf("  --rgb-mic R,G,B\t\tSet mic RGB color (0-255 each)\n");
+            printf("  --rgb-all R,G,B\t\tSet all zones to same RGB color (0-255 each)\n");
+            printf("  --rgb-logo-brightness NUMBER\tSet logo brightness (0-100)\n");
+            printf("  --rgb-power-brightness NUMBER\tSet power brightness (0-100)\n");
+            printf("  --rgb-mic-brightness NUMBER\tSet mic brightness (0-100)\n");
         }
         if (show_voice_prompts) {
             printf("  -v, --voice-prompt [0|1]\tTurn voice prompts off (0) or on (1)\n");
@@ -529,8 +625,15 @@ void print_help(char* programname, struct device* device_found, bool show_all)
         if (show_rotate_to_mute) {
             printf("  -r, --rotate-to-mute [0|1]\t\t\tToggle rotate to mute (0 = off, 1 = on)\n");
         }
+        if (show_microphone_mute_led_brightness || show_rotate_to_mute) {
+            /* Keep existing mic options grouped */
+        }
         if (show_microphone_mute_led_brightness) {
             printf("  --microphone-mute-led-brightness NUMBER\tSet mic mute LED brightness (0-3)\n");
+        }
+        /* New explicit mic-status query */
+        printf("  --mic-status\t\t\t	Query microphone mute status (prints 0=unmuted,1=muted)\n");
+        if (show_microphone_mute_led_brightness) {
         }
         if (show_microphone_volume) {
             printf("  --microphone-volume NUMBER\t\t\tSet microphone volume (0-128)\n");
@@ -603,6 +706,38 @@ void interruptHandler(int signal_number)
             ? (bool)(optarg = argv[optind++])                    \
             : (optarg != NULL))
 
+/**
+ * @brief Parse RGB color string in format "R,G,B"
+ * 
+ * @param str Input string (e.g., "255,128,0")
+ * @param rgb Output array [3] for R, G, B values
+ * @return 0 on success, -1 on error
+ */
+static int parse_rgb_string(const char* str, int rgb[3])
+{
+    if (!str || !rgb)
+        return -1;
+
+    char* endptr;
+    char* str_copy = strdup(str);
+    char* token;
+    int count = 0;
+
+    token = strtok(str_copy, ",");
+    while (token != NULL && count < 3) {
+        long value = strtol(token, &endptr, 10);
+        if (*endptr != '\0' || endptr == token || value < 0 || value > 255) {
+            free(str_copy);
+            return -1;
+        }
+        rgb[count++] = (int)value;
+        token         = strtok(NULL, ",");
+    }
+
+    free(str_copy);
+    return (count == 3) ? 0 : -1;
+}
+
 int main(int argc, char* argv[])
 {
     int c;
@@ -616,6 +751,7 @@ int main(int argc, char* argv[])
     int sidetone_loudness                                      = -1;
     int request_battery                                        = 0;
     int request_chatmix                                        = 0;
+    int request_mic_status                                     = 0;
     int request_connected                                      = 0;
     int notification_sound                                     = -1;
     int lights                                                 = -1;
@@ -633,6 +769,17 @@ int main(int argc, char* argv[])
     unsigned follow_sec                                        = 2;
     struct equalizer_settings* equalizer                       = NULL;
     struct parametric_equalizer_settings* parametric_equalizer = NULL;
+    
+    // RGB Zone control (HS80 specific)
+    int rgb_logo[3]  = { -1, -1, -1 };  // R, G, B
+    int rgb_power[3] = { -1, -1, -1 };  // R, G, B
+    int rgb_mic[3]   = { -1, -1, -1 };  // R, G, B
+    int rgb_all[3]   = { -1, -1, -1 };  // R, G, B
+    int rgb_logo_brightness  = -1; // 0-100
+    int rgb_power_brightness = -1; // 0-100
+    int rgb_mic_brightness_percent   = -1; // 0-100 (percentage for mic zone)
+    int server_mode = 0;
+    int debug_mode = 0;
 
     OutputType output_format = OUTPUT_STANDARD;
     int test_device          = 0;
@@ -658,10 +805,23 @@ int main(int argc, char* argv[])
         { "microphone-volume", required_argument, NULL, 0 },
         { "inactive-time", required_argument, NULL, 'i' },
         { "light", required_argument, NULL, 'l' },
+        { "rgb-logo", required_argument, NULL, 0 },
+        { "rgb-power", required_argument, NULL, 0 },
+        { "rgb-mic", required_argument, NULL, 0 },
+    { "rgb-logo-brightness", required_argument, NULL, 0 },
+    { "rgb-power-brightness", required_argument, NULL, 0 },
+    { "rgb-mic-brightness", required_argument, NULL, 0 },
+    { "server", no_argument, NULL, 'S' },
+        { "debug", no_argument, NULL, 'G' },
+        { "rgb-all", required_argument, NULL, 0 },
+    { "mic-status", no_argument, NULL, 0 },
         { "output", optional_argument, NULL, 'o' },
         { "follow", optional_argument, NULL, 'f' },
         { "notificate", required_argument, NULL, 'n' },
-        { "rotate-to-mute", required_argument, NULL, 'r' },
+        /* Make rotate-to-mute optional argument so calling `-r` alone
+         * doesn't produce a getopt error like "option requires an argument".
+         * If no argument is supplied we print a helpful usage message. */
+        { "rotate-to-mute", optional_argument, NULL, 'r' },
         { "sidetone", required_argument, NULL, 's' },
         { "short-output", no_argument, NULL, 'c' },
         { "timeout", required_argument, NULL, 0 },
@@ -674,7 +834,8 @@ int main(int argc, char* argv[])
 
     int option_index = 0;
 
-    while ((c = getopt_long(argc, argv, "d:bchi:l:f::mn:o::r:s:uv:p:e:?", opts, &option_index)) != -1) {
+    /* Note: 'r' changed to 'r::' to accept an optional argument. */
+    while ((c = getopt_long(argc, argv, "d:bchi:l:f::mn:o::r::s:uv:p:e:?SG", opts, &option_index)) != -1) {
         char* endptr = NULL; // for strtol
 
         switch (c) {
@@ -688,6 +849,12 @@ int main(int argc, char* argv[])
         }
         case 'b':
             request_battery = 1;
+            break;
+        case 'S':
+            server_mode = 1;
+            break;
+        case 'G':
+            debug_mode = 1;
             break;
         case 'c':
             output_format = OUTPUT_SHORT;
@@ -786,9 +953,16 @@ int main(int argc, char* argv[])
             }
             break;
         case 'r':
-            rotate_to_mute = strtol(optarg, &endptr, 10);
-            if (*endptr != '\0' || endptr == optarg || rotate_to_mute < 0 || rotate_to_mute > 1) {
-                fprintf(stderr, "Usage: %s -r 0|1\n", argv[0]);
+            /* Accept optional argument; if absent, print usage message
+             * instead of letting getopt_long emit "option requires an argument". */
+            if (OPTIONAL_ARGUMENT_IS_PRESENT) {
+                rotate_to_mute = strtol(optarg, &endptr, 10);
+                if (*endptr != '\0' || endptr == optarg || rotate_to_mute < 0 || rotate_to_mute > 1) {
+                    fprintf(stderr, "Usage: %s -r 0|1\n", argv[0]);
+                    return 1;
+                }
+            } else {
+                fprintf(stderr, "Usage: %s -r 0|1  (provide 0 to disable, 1 to enable)\n", argv[0]);
                 return 1;
             }
             break;
@@ -842,6 +1016,9 @@ int main(int argc, char* argv[])
                     return 1;
                 }
                 // fall through
+            } else if (strcmp(opts[option_index].name, "mic-status") == 0) {
+                request_mic_status = 1;
+                break;
             } else if (strcmp(opts[option_index].name, "microphone-volume") == 0) {
                 microphone_volume = strtol(optarg, &endptr, 10);
 
@@ -871,6 +1048,60 @@ int main(int argc, char* argv[])
 
                 if (*endptr != '\0' || endptr == optarg || bt_call_volume < 0 || bt_call_volume > 2) {
                     fprintf(stderr, "Usage: %s --bt-call-volume 0-2\n", argv[0]);
+                    return 1;
+                }
+                // fall through
+            } else if (strcmp(opts[option_index].name, "rgb-logo") == 0) {
+                if (parse_rgb_string(optarg, rgb_logo) < 0) {
+                    fprintf(stderr, "Usage: %s --rgb-logo R,G,B (values 0-255)\n", argv[0]);
+                    fprintf(stderr, "Example: %s --rgb-logo 255,0,0 (red)\n", argv[0]);
+                    return 1;
+                }
+                // fall through
+            } else if (strcmp(opts[option_index].name, "rgb-logo-brightness") == 0) {
+                rgb_logo_brightness = strtol(optarg, &endptr, 10);
+                if (*endptr != '\0' || endptr == optarg || rgb_logo_brightness < 0 || rgb_logo_brightness > 100) {
+                    fprintf(stderr, "Usage: %s --rgb-logo-brightness 0-100\n", argv[0]);
+                    return 1;
+                }
+                // fall through
+            } else if (strcmp(opts[option_index].name, "rgb-power") == 0) {
+                if (parse_rgb_string(optarg, rgb_power) < 0) {
+                    fprintf(stderr, "Usage: %s --rgb-power R,G,B (values 0-255)\n", argv[0]);
+                    fprintf(stderr, "Example: %s --rgb-power 0,255,0 (green)\n", argv[0]);
+                    return 1;
+                }
+                // fall through
+            } else if (strcmp(opts[option_index].name, "rgb-power-brightness") == 0) {
+                rgb_power_brightness = strtol(optarg, &endptr, 10);
+                if (*endptr != '\0' || endptr == optarg || rgb_power_brightness < 0 || rgb_power_brightness > 100) {
+                    fprintf(stderr, "Usage: %s --rgb-power-brightness 0-100\n", argv[0]);
+                    return 1;
+                }
+                // fall through
+            } else if (strcmp(opts[option_index].name, "rgb-mic") == 0) {
+                if (parse_rgb_string(optarg, rgb_mic) < 0) {
+                    fprintf(stderr, "Usage: %s --rgb-mic R,G,B (values 0-255)\n", argv[0]);
+                    fprintf(stderr, "Example: %s --rgb-mic 0,0,255 (blue)\n", argv[0]);
+                    return 1;
+                }
+                // fall through
+            } else if (strcmp(opts[option_index].name, "rgb-mic-brightness") == 0) {
+                rgb_mic_brightness_percent = strtol(optarg, &endptr, 10);
+                if (*endptr != '\0' || endptr == optarg || rgb_mic_brightness_percent < 0 || rgb_mic_brightness_percent > 100) {
+                    fprintf(stderr, "Usage: %s --rgb-mic-brightness 0-100\n", argv[0]);
+                    return 1;
+                }
+                // Map percentage to 0-3 for microphone mute LED capability
+                if (rgb_mic_brightness_percent >= 0) {
+                    int mapped = (rgb_mic_brightness_percent * 3 + 50) / 100; // rounded
+                    microphone_mute_led_brightness = mapped;
+                }
+                // fall through
+            } else if (strcmp(opts[option_index].name, "rgb-all") == 0) {
+                if (parse_rgb_string(optarg, rgb_all) < 0) {
+                    fprintf(stderr, "Usage: %s --rgb-all R,G,B (values 0-255)\n", argv[0]);
+                    fprintf(stderr, "Example: %s --rgb-all 255,255,0 (yellow)\n", argv[0]);
                     return 1;
                 }
                 // fall through
@@ -973,6 +1204,19 @@ int main(int argc, char* argv[])
     hid_device* device_handles[headset_available];
     char* hid_paths[headset_available];
 
+    /* Wire globals to local arrays and allocate keep-alive buffers */
+    g_device_handles = device_handles; /* safe: main() lifetime covers threads */
+    g_hid_paths = hid_paths;
+    g_headset_available = headset_available;
+
+    g_last_rgb = calloc(headset_available * 3, sizeof(uint8_t));
+    g_keepalive_running = calloc(headset_available, sizeof(bool));
+#ifdef _WIN32
+    g_keepalive_threads = calloc(headset_available, sizeof(HANDLE));
+#else
+    g_keepalive_threads = calloc(headset_available, sizeof(pthread_t));
+#endif
+
     // Initialize signal handler for CTRL + C
 #ifdef _WIN32
     signal(SIGINT, interruptHandler);
@@ -985,12 +1229,21 @@ int main(int argc, char* argv[])
     FeatureRequest featureRequests[] = {
         { CAP_SIDETONE, CAPABILITYTYPE_ACTION, &sidetone_loudness, sidetone_loudness != -1, {} },
         { CAP_LIGHTS, CAPABILITYTYPE_ACTION, &lights, lights != -1, {} },
-        { CAP_NOTIFICATION_SOUND, CAPABILITYTYPE_ACTION, &notification_sound, notification_sound != -1, {} },
-        { CAP_BATTERY_STATUS, CAPABILITYTYPE_INFO, &request_battery, request_battery == 1, {} },
+    { CAP_NOTIFICATION_SOUND, CAPABILITYTYPE_ACTION, &notification_sound, notification_sound != -1, {} },
+    /* CAP_RGB_ZONES: per-device/zone RGB control (drivers may expose this via
+     * CAP_RGB_ZONES and device->set_zone_rgb / set_all_rgb). We don't route
+     * RGB commands through handle_feature (HS80 handled separately), but
+     * include the capability here so the featureRequests array size stays
+     * in sync with NUM_CAPABILITIES and CLI-driven should_process flags can
+     * be wired if needed in future. */
+    { CAP_RGB_ZONES, CAPABILITYTYPE_ACTION, NULL, 0, {} },
+    { CAP_BATTERY_STATUS, CAPABILITYTYPE_INFO, &request_battery, request_battery == 1, {} },
         { CAP_INACTIVE_TIME, CAPABILITYTYPE_ACTION, &inactive_time, inactive_time != -1, {} },
         { CAP_CHATMIX_STATUS, CAPABILITYTYPE_INFO, &request_chatmix, request_chatmix == 1, {} },
         { CAP_VOICE_PROMPTS, CAPABILITYTYPE_ACTION, &voice_prompts, voice_prompts != -1, {} },
         { CAP_ROTATE_TO_MUTE, CAPABILITYTYPE_ACTION, &rotate_to_mute, rotate_to_mute != -1, {} },
+    { CAP_BUTTON_HOLD, CAPABILITYTYPE_ACTION, NULL, 0, {} },
+    { CAP_BUTTON_RELEASE, CAPABILITYTYPE_ACTION, NULL, 0, {} },
         { CAP_EQUALIZER_PRESET, CAPABILITYTYPE_ACTION, &equalizer_preset, equalizer_preset != -1, {} },
         { CAP_MICROPHONE_MUTE_LED_BRIGHTNESS, CAPABILITYTYPE_ACTION, &microphone_mute_led_brightness, microphone_mute_led_brightness != -1, {} },
         { CAP_MICROPHONE_VOLUME, CAPABILITYTYPE_ACTION, &microphone_volume, microphone_volume != -1, {} },
@@ -1003,8 +1256,270 @@ int main(int argc, char* argv[])
     int numFeatures = sizeof(featureRequests) / sizeof(featureRequests[0]);
     assert(numFeatures == NUM_CAPABILITIES);
 
+    /*
+     * Simple stdin REPL "server" mode: when started with --server and a
+     * selected device (-d vendor:product) the program will stay alive and
+     * accept simple line commands on stdin. This is intentionally not a
+     * network server — it's a lightweight way to keep HID open and interact
+     * with the device without restarting the binary each time.
+     *
+     * Commands (one per line):
+     *  help
+     *  ping
+     *  exit|quit
+     *  set_light 0|1
+     *  set_zone_rgb <zone> <r> <g> <b>
+     *  set_all_rgb <r> <g> <b>
+     *  set_zone_brightness <zone> <percent>
+     *  get_battery
+     */
+    if (server_mode) {
+        if (selected_device == NULL) {
+            fprintf(stderr, "Server mode requires a selected device via -d vendor:product\n");
+            return 1;
+        }
+
+        struct device* dev = selected_device->device;
+    hid_device* server_handle = NULL;
+    char* server_hid_path = NULL;
+    char line[1024];
+    /* Local keep-alive for server-mode (uses server_handle directly) */
+    bool local_keepalive_running = false;
+#ifdef _WIN32
+    HANDLE local_keepalive_thread = NULL;
+#else
+    pthread_t local_keepalive_thread;
+#endif
+    uint8_t local_last_rgb[3] = {0,0,0};
+
+        fprintf(stderr, "Starting interactive server mode for device %s (%04x:%04x)\n", dev->device_name, dev->idVendor, dev->idProduct);
+
+        /* If selected device is HS80: open handle, init software mode and start local keep-alive */
+        if (dev->idVendor == VENDOR_CORSAIR && (dev->idProduct == 0x0a6b || dev->idProduct == 0x0a69 || dev->idProduct == 0x0a71 || dev->idProduct == 0x0a73)) {
+            server_handle = dynamic_connect(&server_hid_path, server_handle, dev, CAP_LIGHTS);
+            if (!server_handle) {
+                fprintf(stderr, "[HS80] Server-mode: could not open HS80 device (CAP_LIGHTS)\n");
+            } else {
+                int initret = hs80_keep_alive(server_handle);
+                fprintf(stderr, "[HS80] Server-mode: hs80_keep_alive init returned %d\n", initret);
+                /* Print the HS80 packet dump after the init log so ordering matches user expectation */
+                hs80_dump_last_packet();
+                /* start local keep-alive using heap-allocated control struct */
+                struct LocalKeepAlive* ka = malloc(sizeof(*ka));
+                ka->handle = server_handle;
+                ka->last_rgb[0] = local_last_rgb[0]; ka->last_rgb[1] = local_last_rgb[1]; ka->last_rgb[2] = local_last_rgb[2];
+                ka->running = 1;
+                local_keepalive_running = true;
+#ifdef _WIN32
+                local_keepalive_thread = CreateThread(NULL, 0, local_keepalive_thread_win, ka, 0, NULL);
+#else
+                pthread_create(&local_keepalive_thread, NULL, local_keepalive_thread_posix, ka);
+#endif
+            }
+        }
+        while (fgets(line, sizeof(line), stdin) != NULL) {
+            // trim newline
+            size_t len = strlen(line);
+            if (len && (line[len - 1] == '\n' || line[len - 1] == '\r'))
+                line[--len] = '\0';
+
+            if (len == 0)
+                continue;
+
+            if (debug_mode)
+                fprintf(stderr, "[DEBUG] command: %s\n", line);
+
+            // tokenise
+            char* saveptr = NULL;
+            char* cmd = strtok_r(line, " ", &saveptr);
+            if (!cmd)
+                continue;
+
+            if (strcmp(cmd, "help") == 0) {
+                printf("{\"status\":\"ok\",\"help\":\"help,ping,exit,set_light,set_zone_rgb,set_all_rgb,set_zone_brightness,get_battery\"}\n");
+                continue;
+            }
+            if (strcmp(cmd, "ping") == 0) {
+                printf("{\"status\":\"ok\",\"message\":\"pong\"}\n");
+                continue;
+            }
+            if (strcmp(cmd, "exit") == 0 || strcmp(cmd, "quit") == 0) {
+                break;
+            }
+
+            // Ensure we have an open handle for device control (use CAP_LIGHTS interface by default)
+            server_handle = dynamic_connect(&server_hid_path, server_handle, dev, CAP_LIGHTS);
+            if (!server_handle) {
+                printf("{\"status\":\"error\",\"message\":\"Could not open device handle\"}\n");
+                continue;
+            }
+
+            if (strcmp(cmd, "set_light") == 0) {
+                char* arg = strtok_r(NULL, " ", &saveptr);
+                if (!arg) {
+                    printf("{\"status\":\"error\",\"message\":\"missing argument\"}\n");
+                    continue;
+                }
+                int val = atoi(arg);
+                if (dev->switch_lights) {
+                    int ret = dev->switch_lights(server_handle, (uint8_t)val);
+                    if (ret >= 0)
+                        printf("{\"status\":\"ok\",\"value\":%d}\n", ret);
+                    else
+                        printf("{\"status\":\"error\",\"value\":%d}\n", ret);
+                } else {
+                    printf("{\"status\":\"error\",\"message\":\"device does not support lights\"}\n");
+                }
+                continue;
+            }
+
+            if (strcmp(cmd, "set_zone_rgb") == 0) {
+                char* szone = strtok_r(NULL, " ", &saveptr);
+                char* sr = strtok_r(NULL, " ", &saveptr);
+                char* sg = strtok_r(NULL, " ", &saveptr);
+                char* sb = strtok_r(NULL, " ", &saveptr);
+                if (!szone || !sr || !sg || !sb) {
+                    printf("{\"status\":\"error\",\"message\":\"usage: set_zone_rgb <zone> <r> <g> <b>\"}\n");
+                    continue;
+                }
+                int zone = atoi(szone);
+                int r = atoi(sr), g = atoi(sg), b = atoi(sb);
+                // prefer device-specific function pointer
+                if (dev->set_zone_rgb) {
+                    int ret = dev->set_zone_rgb(server_handle, (uint8_t)zone, (uint8_t)r, (uint8_t)g, (uint8_t)b);
+                    if (ret >= 0)
+                        printf("{\"status\":\"ok\"}\n");
+                    else
+                        printf("{\"status\":\"error\",\"value\":%d}\n", ret);
+                } else if (dev->idVendor == VENDOR_CORSAIR) {
+                    // HS80 helpers exported in header
+                    if (hs80_set_zone_rgb(server_handle, (uint8_t)zone, (uint8_t)r, (uint8_t)g, (uint8_t)b) > 0)
+                        printf("{\"status\":\"ok\"}\n");
+                    else
+                        printf("{\"status\":\"error\",\"message\":\"hs80 set_zone_rgb failed\"}\n");
+                } else {
+                    printf("{\"status\":\"error\",\"message\":\"set_zone_rgb not supported\"}\n");
+                }
+                continue;
+            }
+
+            if (strcmp(cmd, "set_all_rgb") == 0) {
+                char* sr = strtok_r(NULL, " ", &saveptr);
+                char* sg = strtok_r(NULL, " ", &saveptr);
+                char* sb = strtok_r(NULL, " ", &saveptr);
+                if (!sr || !sg || !sb) {
+                    printf("{\"status\":\"error\",\"message\":\"usage: set_all_rgb <r> <g> <b>\"}\n");
+                    continue;
+                }
+                int r = atoi(sr), g = atoi(sg), b = atoi(sb);
+                if (dev->set_all_rgb) {
+                    int ret = dev->set_all_rgb(server_handle, (uint8_t)r, (uint8_t)g, (uint8_t)b);
+                    if (ret >= 0)
+                        printf("{\"status\":\"ok\"}\n");
+                    else
+                        printf("{\"status\":\"error\",\"value\":%d}\n", ret);
+                } else if (dev->idVendor == VENDOR_CORSAIR) {
+                        int hret = hs80_set_all_rgb(server_handle, (uint8_t)r, (uint8_t)g, (uint8_t)b);
+                        if (hret > 0) {
+                            printf("{\"status\":\"ok\"}\n");
+                            /* update local keep-alive (server-mode) or global last_rgb */
+                            local_last_rgb[0] = (uint8_t)r;
+                            local_last_rgb[1] = (uint8_t)g;
+                            local_last_rgb[2] = (uint8_t)b;
+                            int idx = selected_device - devices_found;
+                            if (idx >= 0 && idx < g_headset_available) {
+                                g_last_rgb[idx * 3 + 0] = (uint8_t)r;
+                                g_last_rgb[idx * 3 + 1] = (uint8_t)g;
+                                g_last_rgb[idx * 3 + 2] = (uint8_t)b;
+                            }
+                        } else {
+                            printf("{\"status\":\"error\",\"message\":\"hs80 set_all_rgb failed (ret=%d)\"}\n", hret);
+                        }
+                } else {
+                    printf("{\"status\":\"error\",\"message\":\"set_all_rgb not supported\"}\n");
+                }
+                continue;
+            }
+
+            if (strcmp(cmd, "set_zone_brightness") == 0) {
+                char* szone = strtok_r(NULL, " ", &saveptr);
+                char* sper = strtok_r(NULL, " ", &saveptr);
+                if (!szone || !sper) {
+                    printf("{\"status\":\"error\",\"message\":\"usage: set_zone_brightness <zone> <percent>\"}\n");
+                    continue;
+                }
+                int zone = atoi(szone);
+                int percent = atoi(sper);
+                if (dev->set_zone_brightness) {
+                    int ret = dev->set_zone_brightness(server_handle, (uint8_t)zone, (uint8_t)percent);
+                    if (ret >= 0)
+                        printf("{\"status\":\"ok\"}\n");
+                    else
+                        printf("{\"status\":\"error\",\"value\":%d}\n", ret);
+                } else if (dev->idVendor == VENDOR_CORSAIR) {
+                    if (hs80_set_zone_brightness(server_handle, (uint8_t)zone, (uint8_t)percent) >= 0)
+                        printf("{\"status\":\"ok\"}\n");
+                    else
+                        printf("{\"status\":\"error\",\"message\":\"hs80 set_zone_brightness failed\"}\n");
+                } else {
+                    printf("{\"status\":\"error\",\"message\":\"set_zone_brightness not supported\"}\n");
+                }
+                continue;
+            }
+
+            if (strcmp(cmd, "get_battery") == 0) {
+                if (dev->request_battery) {
+                    BatteryInfo bi = dev->request_battery(server_handle);
+                    printf("{\"status\":\"ok\",\"battery_level\":%d,\"battery_status\":%d}\n", bi.level, bi.status);
+                } else {
+                    printf("{\"status\":\"error\",\"message\":\"battery not supported\"}\n");
+                }
+                continue;
+            }
+
+            printf("{\"status\":\"error\",\"message\":\"unknown command\"}\n");
+        }
+
+            if (server_handle) {
+                hid_close(server_handle);
+                free(server_hid_path);
+            }
+
+            /* stop local keep-alive and free control struct */
+            if (local_keepalive_running) {
+                local_keepalive_running = false;
+#ifdef _WIN32
+                if (local_keepalive_thread) {
+                    WaitForSingleObject(local_keepalive_thread, 2000);
+                    CloseHandle(local_keepalive_thread);
+                }
+#else
+                pthread_join(local_keepalive_thread, NULL);
+#endif
+                /* the thread frees its own LocalKeepAlive struct when it exits */
+            }
+        return 0;
+    }
+
     // Initialize all handles, hid_paths and feature requests for all devices
     FeatureRequest* feature_requests[headset_available];
+    /* Stop keep-alive threads first */
+    for (int i = 0; i < headset_available; i++) {
+        if (g_keepalive_running && g_keepalive_running[i]) {
+            g_keepalive_running[i] = false;
+#ifdef _WIN32
+            if (g_keepalive_threads && g_keepalive_threads[i]) {
+                WaitForSingleObject(g_keepalive_threads[i], 2000);
+                CloseHandle(g_keepalive_threads[i]);
+            }
+#else
+            if (g_keepalive_threads) {
+                pthread_join(g_keepalive_threads[i], NULL);
+            }
+#endif
+        }
+    }
+
     for (int i = 0; i < headset_available; i++) {
         device_handles[i]                = NULL;
         hid_paths[i]                     = NULL;
@@ -1014,6 +1529,14 @@ int main(int argc, char* argv[])
     }
 
     bool isExtendedOutput = output_format == OUTPUT_YAML || output_format == OUTPUT_JSON || output_format == OUTPUT_ENV;
+    // If JSON output is selected, suppress all stderr to avoid contaminating stdout
+    if (output_format == OUTPUT_JSON) {
+#ifdef _WIN32
+    freopen("NUL", "w", stderr);
+#else
+    freopen("/dev/null", "w", stderr);
+#endif
+    }
     for (int i = 0; i < headset_available; i++) {
         for (int j = 0; j < numFeatures; j++) {
             // For specific output types, like YAML, we will do all actions - even when not specified - to aggregate all information
@@ -1032,6 +1555,78 @@ int main(int argc, char* argv[])
                     }
                 }
             }
+        }
+    }
+
+    /* Auto-initialize HS80 devices: open HID and enable software mode + start keep-alive */
+    for (int i = 0; i < headset_available; i++) {
+        struct device* d = devices_found[i].device;
+        if (d->idVendor == VENDOR_CORSAIR) {
+            uint16_t pid = d->idProduct;
+            if (pid == 0x0a6b || pid == 0x0a69 || pid == 0x0a71 || pid == 0x0a73) {
+                /* open using CAP_LIGHTS interface */
+                device_handles[i] = dynamic_connect(&hid_paths[i], device_handles[i], d, CAP_LIGHTS);
+                if (!device_handles[i]) {
+                    fprintf(stderr, "[HS80] Warning: could not open HS80 device index %d for software-mode init\n", i);
+                    continue;
+                }
+
+                /* Trigger software-mode initialization inside driver */
+                hs80_set_all_rgb(device_handles[i], 0, 0, 0);
+
+                /* Initialize last_rgb for keep-alive */
+                g_last_rgb[i * 3 + 0] = 0;
+                g_last_rgb[i * 3 + 1] = 0;
+                g_last_rgb[i * 3 + 2] = 0;
+
+                /* start keep-alive thread */
+                g_keepalive_running[i] = true;
+#ifdef _WIN32
+                int* arg = malloc(sizeof(int)); *arg = i;
+                g_keepalive_threads[i] = CreateThread(NULL, 0, hs80_keepalive_thread_win, arg, 0, NULL);
+#else
+                int* arg = malloc(sizeof(int)); *arg = i;
+                pthread_create(&g_keepalive_threads[i], NULL, hs80_keepalive_thread_posix, arg);
+#endif
+                fprintf(stderr, "[HS80] Software-mode initialized and keep-alive started for device index %d\n", i);
+            }
+        }
+    }
+
+    /* Handle explicit --mic-status request: query current microphone mute state
+     * and exit. This mirrors the style used for --battery but keeps the option
+     * explicit and separate from other feature processing. */
+    if (request_mic_status) {
+        if (selected_device == NULL) {
+            fprintf(stderr, "Error: No device has been selected.\n");
+            return 1;
+        }
+        int selected_device_index = selected_device - devices_found;
+        hid_device* device_handle = device_handles[selected_device_index];
+        char* hid_path            = hid_paths[selected_device_index];
+        struct device* device     = selected_device->device;
+        int is_test_device        = test_device && device->idVendor == VENDOR_TESTDEVICE && device->idProduct == PRODUCT_TESTDEVICE;
+
+        if (!device->request_mic_status) {
+            fprintf(stderr, "Microphone status request not supported by this device.\n");
+            return 1;
+        }
+
+        if (!is_test_device) {
+            device_handle = dynamic_connect(&hid_path, device_handle, device, CAP_LIGHTS);
+            if (!device_handle) {
+                fprintf(stderr, "Error while getting device handle.\n");
+                return 1;
+            }
+        }
+
+        int status = device->request_mic_status(device_handle);
+        if (status >= 0) {
+            printf("%d\n", status);
+            return 0;
+        } else {
+            fprintf(stderr, "Failed to request microphone status (err=%d)\n", status);
+            return 1;
         }
     }
 
@@ -1086,6 +1681,79 @@ int main(int argc, char* argv[])
                         deviceFeatureRequests[j].result = handle_feature(devices_found[i].device, &device_handles[i], &hid_paths[i], deviceFeatureRequests[j].cap, deviceFeatureRequests[j].param);
                     }
                 }
+                
+                // HS80-specific RGB zone control (device-specific features, not standard capabilities)
+                if (devices_found[i].device->idVendor == 0x1b1c && devices_found[i].device->idProduct == 0x0a6b) {
+                    // Open device handle using CAP_LIGHTS interface
+                    device_handles[i] = dynamic_connect(&hid_paths[i], device_handles[i], devices_found[i].device, CAP_LIGHTS);
+                    
+                    if (!device_handles[i]) {
+                        fprintf(stderr, "[HS80] Fehler beim Öffnen des HID-Geräts für RGB-Zonen-Steuerung\n");
+                        continue;
+                    }
+                    
+                    // Process RGB zone commands
+                    if (rgb_all[0] >= 0) {
+                        if (hs80_set_all_rgb(device_handles[i], rgb_all[0], rgb_all[1], rgb_all[2]) > 0) {
+                                fprintf(stderr, "[HS80] Alle RGB-Zonen erfolgreich gesetzt: R=%d, G=%d, B=%d\n", rgb_all[0], rgb_all[1], rgb_all[2]);
+                                /* update keep-alive color for this device */
+                                g_last_rgb[i * 3 + 0] = (uint8_t)rgb_all[0];
+                                g_last_rgb[i * 3 + 1] = (uint8_t)rgb_all[1];
+                                g_last_rgb[i * 3 + 2] = (uint8_t)rgb_all[2];
+                            } else {
+                                fprintf(stderr, "[HS80] Fehler beim Setzen aller RGB-Zonen\n");
+                            }
+                    }
+                    
+                    if (rgb_logo[0] >= 0) {
+                        if (hs80_set_zone_rgb(device_handles[i], 0, rgb_logo[0], rgb_logo[1], rgb_logo[2]) > 0) {
+                            fprintf(stderr, "[HS80] Logo RGB erfolgreich gesetzt: R=%d, G=%d, B=%d\n", rgb_logo[0], rgb_logo[1], rgb_logo[2]);
+                        } else {
+                            fprintf(stderr, "[HS80] Fehler beim Setzen der Logo RGB\n");
+                        }
+                    }
+                    
+                    if (rgb_power[0] >= 0) {
+                        if (hs80_set_zone_rgb(device_handles[i], 1, rgb_power[0], rgb_power[1], rgb_power[2]) > 0) {
+                            fprintf(stderr, "[HS80] Power LED RGB erfolgreich gesetzt: R=%d, G=%d, B=%d\n", rgb_power[0], rgb_power[1], rgb_power[2]);
+                        } else {
+                            fprintf(stderr, "[HS80] Fehler beim Setzen der Power LED RGB\n");
+                        }
+                    }
+                    
+                    if (rgb_mic[0] >= 0) {
+                        if (hs80_set_zone_rgb(device_handles[i], 2, rgb_mic[0], rgb_mic[1], rgb_mic[2]) > 0) {
+                            fprintf(stderr, "[HS80] Mic LED RGB erfolgreich gesetzt: R=%d, G=%d, B=%d\n", rgb_mic[0], rgb_mic[1], rgb_mic[2]);
+                        } else {
+                            fprintf(stderr, "[HS80] Fehler beim Setzen der Mic LED RGB\n");
+                        }
+                    }
+
+                    // Per-zone brightness commands
+                    if (rgb_logo_brightness != -1) {
+                        if (hs80_set_zone_brightness(device_handles[i], 0, (uint8_t)rgb_logo_brightness) == 0) {
+                            fprintf(stderr, "[HS80] Logo Helligkeit gesetzt: %d%%\n", rgb_logo_brightness);
+                        } else {
+                            fprintf(stderr, "[HS80] Fehler beim Setzen der Logo Helligkeit\n");
+                        }
+                    }
+
+                    if (rgb_power_brightness != -1) {
+                        if (hs80_set_zone_brightness(device_handles[i], 1, (uint8_t)rgb_power_brightness) == 0) {
+                            fprintf(stderr, "[HS80] Power Helligkeit gesetzt: %d%%\n", rgb_power_brightness);
+                        } else {
+                            fprintf(stderr, "[HS80] Fehler beim Setzen der Power Helligkeit\n");
+                        }
+                    }
+
+                    if (rgb_mic_brightness_percent != -1) {
+                        if (hs80_set_zone_brightness(device_handles[i], 2, (uint8_t)rgb_mic_brightness_percent) == 0) {
+                            fprintf(stderr, "[HS80] Mic Helligkeit gesetzt: %d%%\n", rgb_mic_brightness_percent);
+                        } else {
+                            fprintf(stderr, "[HS80] Fehler beim Setzen der Mic Helligkeit\n");
+                        }
+                    }
+                }
             }
 
             output(devices_found, print_capabilities != -1, output_format);
@@ -1117,6 +1785,10 @@ int main(int argc, char* argv[])
         free(devices_found[i].featureRequests);
         free(devices_found[i].device);
     }
+
+    if (g_last_rgb) { free(g_last_rgb); g_last_rgb = NULL; }
+    if (g_keepalive_running) { free(g_keepalive_running); g_keepalive_running = NULL; }
+    if (g_keepalive_threads) { free(g_keepalive_threads); g_keepalive_threads = NULL; }
 
     hid_exit();
     return 0;
